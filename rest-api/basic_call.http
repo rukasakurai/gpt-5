@@ -1,0 +1,18 @@
+@endpoint = {{$dotenv AZURE_OPENAI_ENDPOINT}}
+@apiKey = {{$dotenv AZURE_OPENAI_API_KEY}}
+@deploymentName = {{$dotenv AZURE_OPENAI_DEPLOYMENT_NAME}}
+
+### Basic GPT-5 Call
+# @name basic_call
+POST {{endpoint}}/openai/deployments/{{deploymentName}}/chat/completions?api-version=2024-02-01
+Content-Type: application/json
+api-key: {{apiKey}}
+
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello, GPT-5!"
+    }
+  ]
+}
