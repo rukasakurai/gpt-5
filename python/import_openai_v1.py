@@ -11,11 +11,17 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+# TODO (Double chekc): Verify if "api-key" header is needed
+default_headers = {
+    "api-key": os.getenv("AZURE_OPENAI_API_KEY"),
+}
+
 def main():
     # Initialize OpenAI client configured for Azure OpenAI
     client = OpenAI(
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        base_url=f"{os.getenv('AZURE_OPENAI_ENDPOINT')}/openai/v1/"
+        base_url=f"{os.getenv('AZURE_OPENAI_ENDPOINT')}/openai/v1/",
+        default_headers=default_headers, # TODO (Double chekc): Verify if needed
     )
     
     try:

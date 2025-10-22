@@ -15,3 +15,28 @@ The following are key types of variations when using GPT-5, whether calling thro
 - **Authentication method** (e.g., API key vs. Azure AD token)
 - **Operation surface** (e.g., Chat Completions, Responses API, Embeddings)
 - **Other** (e.g., deployment vs. model naming, streaming, advanced features)
+
+### Combination 1
+- **Client class choice (same Python package)**: `from openai import OpenAI`
+- **API endpoint style**: `/v1`
+- **Service type**: Azure OpenAI Service (NOT Azure AI Foundry)
+- **Authentication method**: API key
+- **Operation surface**: Chat Completions
+- **Model**: GPT-5
+- Through API Management, not directly to Azure OpenAI Service
+
+TODO (Double check): Compared to directly calling Azure OpenAI Serivce, when calling through Azure API Management with  `from openai import OpenAI` (instead of with  `from openai import AzureOpenAI`), the following changes needs to be applied
+```diff
++ default_headers = {
++    "api-key": os.getenv("KEY"),
++}
+
+def main():
+    # Initialize OpenAI client configured for Azure OpenAI
+    client = OpenAI(
+        api_key=os.getenv("KEY"),
+        base_url=f"{os.getenv('ENDPOINT')}/openai/v1/",
++        default_headers=default_headers,
+    )
+```
+
