@@ -31,8 +31,6 @@ TODO (Double check): Compared to directly calling Azure OpenAI Serivce, when cal
 +    "api-key": os.getenv("KEY"),
 +}
 
-def main():
-    # Initialize OpenAI client configured for Azure OpenAI
     client = OpenAI(
         api_key=os.getenv("KEY"),
         base_url=f"{os.getenv('ENDPOINT')}/openai/v1/",
