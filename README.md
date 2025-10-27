@@ -23,7 +23,7 @@ The following are key types of variations when using GPT-5, whether calling thro
 - **Authentication method**: API key
 - **Operation surface**: Chat Completions
 - **Model**: GPT-5
-- Through API Management, not directly to Azure OpenAI Service
+- Through API Management, not directly to Azure OpenAI Service: [Details](azure-api-management.md)
 
 Compared to directly calling Azure OpenAI Serivce, when calling through Azure API Management with `from openai import OpenAI` (instead of with  `from openai import AzureOpenAI`), the following changes needs to be applied
 ```diff
@@ -37,4 +37,6 @@ Compared to directly calling Azure OpenAI Serivce, when calling through Azure AP
 +        default_headers=default_headers,
     )
 ```
+
+
 
