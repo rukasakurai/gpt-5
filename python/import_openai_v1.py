@@ -11,10 +11,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# TODO (Double chekc): Verify if "api-key" header is needed
+# When using Azure API Management as the endpoint with "Subscription required", it is necessary to set the subscription key in the header
 default_headers = {
-    "api-key": os.getenv("API_KEY"),
-#    "Ocp-Apim-Subscription-Key": os.getenv("AZURE_OPENAI_API_KEY"), # Results in `Error: Error code: 401 - {'statusCode': 401, 'message': 'Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.'}` with this
+    "api-key": os.getenv("API_KEY"), # Whether to use "api-key" or "Ocp-Apim-Subscription-Key" or something else depends on the settings in Azure API Management
 }
 
 def main():
@@ -22,7 +21,7 @@ def main():
     client = OpenAI(
         api_key=os.getenv("API_KEY"), # When the endpoint is Azure API Management, the value does not matter, but it is required to set it.
         base_url=f"{os.getenv('API_ENDPOINT')}/openai/v1/",
-        default_headers=default_headers, # TODO (Double chekc): Verify if needed
+        default_headers=default_headers, # When using Azure API Management as the endpoint with "Subscription required", it is necessary to set the subscription key in the header
     )
     
     try:
