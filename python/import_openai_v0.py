@@ -14,8 +14,8 @@ load_dotenv()
 def main():
     # Initialize OpenAI client configured for Azure OpenAI
     client = OpenAI(
-        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        base_url=f"{os.getenv('AZURE_OPENAI_ENDPOINT')}/openai/deployments/{os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME')}",
+        api_key=os.getenv("API_KEY"),
+        base_url=f"{os.getenv('API_ENDPOINT')}/openai/deployments/{os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME')}",
         default_query={"api-version": "2024-02-01"}
     )
     
