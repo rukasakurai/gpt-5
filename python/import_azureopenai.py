@@ -13,9 +13,9 @@ load_dotenv()
 def main():
     # Initialize Azure OpenAI client
     client = AzureOpenAI(
-        azure_endpoint=os.getenv("API_ENDPOINT"),
+        azure_endpoint=f"{os.getenv('API_ENDPOINT')}",
         api_key=os.getenv("API_KEY"),
-        api_version="2024-02-01"
+        api_version="2024-02-01",
     )
     
     try:

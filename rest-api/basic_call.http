@@ -1,5 +1,5 @@
-@endpoint = {{$dotenv AZURE_OPENAI_ENDPOINT}}
-@apiKey = {{$dotenv AZURE_OPENAI_API_KEY}}
+@endpoint = {{$dotenv API_ENDPOINT}}
+@apiKey = {{$dotenv API_KEY}}
 @deploymentName = {{$dotenv AZURE_OPENAI_DEPLOYMENT_NAME}}
 
 ### Basic GPT-5 Call

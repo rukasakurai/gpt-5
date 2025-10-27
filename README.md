@@ -1,6 +1,6 @@
 # gpt-5
 
-> **Note:** This repository is work in progress.
+> **Note:** This repository is work in progress, and may contain inaccurate/outdated information
 
 Samples of ways to call gpt-5 on Azure
 
@@ -25,15 +25,15 @@ The following are key types of variations when using GPT-5, whether calling thro
 - **Model**: GPT-5
 - Through API Management, not directly to Azure OpenAI Service
 
-TODO (Double check): Compared to directly calling Azure OpenAI Serivce, when calling through Azure API Management with  `from openai import OpenAI` (instead of with  `from openai import AzureOpenAI`), the following changes needs to be applied
+Compared to directly calling Azure OpenAI Serivce, when calling through Azure API Management with `from openai import OpenAI` (instead of with  `from openai import AzureOpenAI`), the following changes needs to be applied
 ```diff
 + default_headers = {
-+    "api-key": os.getenv("KEY"),
++    "api-key": os.getenv("API_KEY"),
 +}
 
     client = OpenAI(
-        api_key=os.getenv("KEY"),
-        base_url=f"{os.getenv('ENDPOINT')}/openai/v1/",
+        api_key=os.getenv("API_KEY"),
+        base_url=f"{os.getenv('API_ENDPOINT')}/openai/v1/",
 +        default_headers=default_headers,
     )
 ```
