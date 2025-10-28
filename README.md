@@ -43,4 +43,3 @@ Compared to directly calling Azure OpenAI Serivce, when calling through Azure AP
 ```
 
 While the page (Authenticate and authorize access to Azure OpenAI APIs using Azure API Management)[https://learn.microsoft.com/en-us/azure/api-management/api-management-authenticate-authorize-azure-openai] exists, it currently only covers the APIM -> Azure OpenAI Service part rather than the client -> APIM part.
-
