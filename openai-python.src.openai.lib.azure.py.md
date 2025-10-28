@@ -14,26 +14,26 @@ Versioning is supplied via the `api-version` query parameter (e.g. `?api-version
 ## Evidence in `src/openai/lib/azure.py`
 
 1. Base URL construction (no `/v1`):
-   - Synchronous client: lines [117-125](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L117-L125) build `base_url` with `/openai` or `/openai/deployments/{azure_deployment}`.
-   - Asynchronous client: lines [247-255](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L247-L255) mirror the same logic.
+   - Synchronous client: lines [216-231](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L216-L231) build `base_url` with `/openai` or `/openai/deployments/{azure_deployment}`.
+   - Asynchronous client: lines [497-509](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L497-L509) mirror the same logic.
 
 2. API version passed as query parameter:
-   - Sync: line [108](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L108) sets `default_query = {"api-version": api_version}` (or merges it).
-   - Async: line [238](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L238) does the same.
+   - Sync: line [211](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L211) sets `default_query = {"api-version": api_version}` (or merges it).
+   - Async: line [492](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L492) does the same.
 
 3. Dynamic insertion of deployment path for certain feature endpoints:
-   - Lines [32-40](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L32-L40) adjust request URLs to include `/deployments/{model}` for endpoints like `/chat/completions`, `/embeddings`, etc., still under `/openai`, not `/v1`.
+   - Lines [57-68](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L57-L68) adjust request URLs to include `/deployments/{model}` for endpoints like `/chat/completions`, `/embeddings`, etc., still under `/openai`, not `/v1`.
 
 4. URL preparation when an Azure endpoint + deployment is configured:
-   - Lines [45-57](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L45-L57) show `_prepare_url` composing `.../openai/{feature}` by manipulating raw paths (again, no `/v1`).
+   - Lines [71-86](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L71-L86) show `_prepare_url` composing `.../openai/{feature}` by manipulating raw paths (again, no `/v1`).
 
 5. Realtime endpoint configuration:
-   - Sync realtime: lines [151-170](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L151-L170) use `self._prepare_url("/realtime")` and append `api-version` as a query parameter.
-   - Async realtime: lines [329-348](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L329-L348) replicate the same pattern.
+   - Sync realtime: lines [341-364](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L341-364) use `self._prepare_url("/realtime")` and append `api-version` as a query parameter.
+   - Async realtime: lines [624-647](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L624-647) replicate the same pattern.
 
 6. Authentication headers differ from generic OpenAI usage:
-   - Sync auth setup: lines [132-147](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L132-L147) prefer `api-key` header or `Authorization: Bearer <AAD token>`.
-   - Async auth setup: lines [310-324](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L310-L324) mirror this logic.
+   - Sync auth setup: lines [322-337](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L322-337) prefer `api-key` header or `Authorization: Bearer <AAD token>`.
+   - Async auth setup: lines [605-622](https://github.com/openai/openai-python/blob/4e8856576211064b09c0cc4a1ed35b82b169abe2/src/openai/lib/azure.py#L605-622) mirror this logic.
 
 ## Summary
 
