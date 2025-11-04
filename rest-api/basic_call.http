@@ -1,8 +1,24 @@
-@endpoint = {{$dotenv AZURE_OPENAI_ENDPOINT}}
-@apiKey = {{$dotenv AZURE_OPENAI_API_KEY}}
+@endpoint = {{$dotenv API_ENDPOINT}}
+@apiKey = {{$dotenv API_KEY}}
 @deploymentName = {{$dotenv AZURE_OPENAI_DEPLOYMENT_NAME}}
 
-### Basic GPT-5 Call
+### v1 Chat Completion Call
+# @name basic_call
+POST {{endpoint}}/openai/v1/chat/completions
+Content-Type: application/json
+api-key: {{apiKey}}
+
+{
+  "model": "{{deploymentName}}",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello, GPT-5!"
+    }
+  ]
+}
+
+### non-v1 Chat Completion Call (while this works as of October 27th 2025, documentation advises to use v1 endpoint for GPT-5
 # @name basic_call
 POST {{endpoint}}/openai/deployments/{{deploymentName}}/chat/completions?api-version=2024-02-01
 Content-Type: application/json
