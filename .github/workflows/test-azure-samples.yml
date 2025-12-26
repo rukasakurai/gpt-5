@@ -20,7 +20,7 @@ jobs:
     env:
       API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
       API_KEY: ${{ secrets.API_KEY }}
-      MODEL_DEPLOYMENT_NAME: ${{ secrets.MODEL_DEPLOYMENT_NAME }}
+      MODEL_DEPLOYMENT_NAME: ${{ vars.MODEL_DEPLOYMENT_NAME }}
 
     steps:
       - name: Checkout code
