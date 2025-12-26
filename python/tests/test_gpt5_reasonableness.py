@@ -31,6 +31,9 @@ def get_openai_client():
 
 def call_gpt5(client, messages):
     """Make a chat completion request to GPT-5."""
+    if not messages or not isinstance(messages, list):
+        raise ValueError("messages must be a non-empty list")
+    
     response = client.chat.completions.create(
         model=os.getenv("MODEL_DEPLOYMENT_NAME"),
         messages=messages
@@ -152,17 +155,11 @@ class TestGPT5OutputReasonableness:
         assert len(follow_up_response) > 0
         
         # Use GPT-5 to evaluate the reasonableness of the conversation
-        full_conversation = f"""
-Conversation:
-User: My name is Alice.
-Assistant: {first_response}
-User: What is my name?
-Assistant: {follow_up_response}
-"""
+        full_conversation = f"User: My name is Alice. Assistant: {first_response} User: What is my name? Assistant: {follow_up_response}"
         is_reasonable, explanation = evaluate_reasonableness(
             self.client, 
             "A conversation where user states their name is Alice, then asks what their name is",
-            follow_up_response
+            full_conversation
         )
         
         assert is_reasonable, f"GPT-5 response was deemed unreasonable. Response: {follow_up_response}. Explanation: {explanation}"
