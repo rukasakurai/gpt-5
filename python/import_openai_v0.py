@@ -20,7 +20,7 @@ def main():
     # Initialize OpenAI client configured for Azure OpenAI
     client = OpenAI(
         api_key=os.getenv("API_KEY"),
-        base_url=f"{os.getenv('API_ENDPOINT')}/openai/deployments/{os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME')}",
+        base_url=f"{os.getenv('API_ENDPOINT')}/openai/deployments/{os.getenv('MODEL_DEPLOYMENT_NAME')}",
         default_query={"api-version": "2024-02-01"},
         default_headers=default_headers, # When using Azure API Management as the endpoint with "Subscription required", it is necessary to set the subscription key in the header
     )
@@ -28,7 +28,7 @@ def main():
     try:
         # Make a chat completion request
         response = client.chat.completions.create(
-            model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+            model=os.getenv("MODEL_DEPLOYMENT_NAME"),
             messages=[
                 {
                     "role": "user",

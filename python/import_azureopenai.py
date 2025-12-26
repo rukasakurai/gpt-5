@@ -21,7 +21,7 @@ def main():
     try:
         # Make a chat completion request
         response = client.chat.completions.create(
-            model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+            model=os.getenv("MODEL_DEPLOYMENT_NAME"),
             messages=[
                 {
                     "role": "user",
