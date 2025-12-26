@@ -14,6 +14,10 @@ jobs:
         environment: [azure-openai-service, azure-api-management]
       fail-fast: false
     environment: ${{ matrix.environment }}
+    env:
+      API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
+      API_KEY: ${{ secrets.API_KEY }}
+      MODEL_DEPLOYMENT_NAME: ${{ secrets.MODEL_DEPLOYMENT_NAME }}
 
     steps:
       - name: Checkout code
@@ -23,6 +27,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: python/requirements.txt
 
       - name: Install dependencies
         run: |
@@ -30,22 +36,10 @@ jobs:
           pip install -r python/requirements.txt
 
       - name: Run import_azureopenai.py
-        env:
-          API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
-          API_KEY: ${{ secrets.API_KEY }}
-          MODEL_DEPLOYMENT_NAME: ${{ secrets.MODEL_DEPLOYMENT_NAME }}
         run: python python/import_azureopenai.py
 
       - name: Run import_openai_v0.py
-        env:
-          API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
-          API_KEY: ${{ secrets.API_KEY }}
-          MODEL_DEPLOYMENT_NAME: ${{ secrets.MODEL_DEPLOYMENT_NAME }}
         run: python python/import_openai_v0.py
 
       - name: Run import_openai_v1.py
-        env:
-          API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
-          API_KEY: ${{ secrets.API_KEY }}
-          MODEL_DEPLOYMENT_NAME: ${{ secrets.MODEL_DEPLOYMENT_NAME }}
         run: python python/import_openai_v1.py
