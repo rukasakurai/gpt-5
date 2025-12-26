@@ -2,11 +2,11 @@
 ## Setting up Azure API Management
 ### Provisioning
 Provisioning of the Azure API Management resource can be done various ways: Azure Portal GUI, Bicep, etc.
-While for repeatability purposes IaC (e.g., Bicep) is preferrable, this repository as of now does not contain Bicep, and testing was done with an Azure API Management that was provisioned through the Azure Portal GUI.
+While for repeatability purposes IaC (e.g., Bicep) is preferable, this repository as of now does not contain Bicep, and testing was done with an Azure API Management that was provisioned through the Azure Portal GUI.
 
 ### APIs
 Setting up the the APIs can also be done various ways: Azure Portal GUI, Bicep, etc.
-While for repeatability purposes IaC (e.g., Bicep) is preferrable, this repository as of now does not contain Bicep, and testing was done with an Azure API Management that was provisioned through the Azure Portal GUI.
+While for repeatability purposes IaC (e.g., Bicep) is preferable, this repository as of now does not contain Bicep, and testing was done with an Azure API Management that was provisioned through the Azure Portal GUI.
 
 #### Setting up APIs through the Azure Portal GUI
 As of the "+Add API" button in the "APIs" menu of Azure API Management service shows the following options
