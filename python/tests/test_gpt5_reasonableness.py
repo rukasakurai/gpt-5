@@ -2,50 +2,40 @@
 Unit tests to verify GPT-5 runtime output reasonableness.
 
 These tests:
-- Run the main code components that utilize GPT-5
+- Run the main code components that utilize GPT-5 from the python/ directory
 - Check the runtime responses or outputs produced by GPT-5
 - Assert that the responses are reasonable by using GPT-5 to evaluate the outputs
 """
 
 import os
+import sys
 import pytest
-from openai import OpenAI
 from dotenv import load_dotenv
+
+# Add parent directory to path to import the modules
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import the actual modules from the python/ directory
+import import_azureopenai
+import import_openai_v0
+import import_openai_v1
 
 # Load environment variables from .env file
 load_dotenv()
 
 
-def get_openai_client():
-    """Create and return an OpenAI client configured for Azure OpenAI."""
-    default_headers = {
-        "api-key": os.getenv("API_KEY"),
-    }
-    
-    return OpenAI(
-        api_key=os.getenv("API_KEY"),
-        base_url=f"{os.getenv('API_ENDPOINT')}/openai/v1/",
-        default_headers=default_headers,
-    )
-
-
-def call_gpt5(client, messages):
-    """Make a chat completion request to GPT-5."""
-    if not messages or not isinstance(messages, list):
-        raise ValueError("messages must be a non-empty list")
-    
-    response = client.chat.completions.create(
-        model=os.getenv("MODEL_DEPLOYMENT_NAME"),
-        messages=messages
-    )
-    return response.choices[0].message.content
-
-
-def evaluate_reasonableness(client, prompt, response):
+def evaluate_reasonableness(client, chat_fn, prompt, response):
     """
     Use GPT-5 to evaluate whether a given response is reasonable.
     
-    Returns a tuple of (is_reasonable: bool, explanation: str)
+    Args:
+        client: OpenAI/AzureOpenAI client instance.
+        chat_fn: Function to call for chat completion (module's chat_completion function).
+        prompt: The original prompt given to the AI.
+        response: The AI's response to evaluate.
+    
+    Returns:
+        A tuple of (is_reasonable: bool, explanation: str)
     """
     evaluation_prompt = f"""You are an AI response evaluator. Your task is to evaluate whether a given AI response is reasonable and appropriate for the given prompt.
 
@@ -65,7 +55,7 @@ Criteria for a reasonable response:
         {"role": "user", "content": evaluation_prompt}
     ]
     
-    evaluation_result = call_gpt5(client, evaluation_messages)
+    evaluation_result = chat_fn(client, evaluation_messages)
     
     # Parse the result - first line should be REASONABLE or UNREASONABLE
     lines = evaluation_result.strip().split('\n')
@@ -75,8 +65,8 @@ Criteria for a reasonable response:
     return is_reasonable, explanation
 
 
-class TestGPT5OutputReasonableness:
-    """Test class for GPT-5 output reasonableness verification."""
+class TestImportAzureOpenAI:
+    """Test the import_azureopenai module."""
     
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -85,70 +75,153 @@ class TestGPT5OutputReasonableness:
         if not all([os.getenv("API_ENDPOINT"), os.getenv("API_KEY"), os.getenv("MODEL_DEPLOYMENT_NAME")]):
             pytest.skip("API credentials not configured. Set API_ENDPOINT, API_KEY, and MODEL_DEPLOYMENT_NAME environment variables.")
         
-        self.client = get_openai_client()
+        self.client = import_azureopenai.get_azure_openai_client()
     
-    def test_greeting_response(self):
-        """Test that GPT-5 responds reasonably to a simple greeting."""
+    def test_get_azure_openai_client(self):
+        """Test that get_azure_openai_client returns a valid client."""
+        client = import_azureopenai.get_azure_openai_client()
+        assert client is not None
+    
+    def test_chat_completion_greeting(self):
+        """Test chat_completion with a greeting prompt."""
         prompt = "Hello, GPT-5!"
         messages = [{"role": "user", "content": prompt}]
         
-        response = call_gpt5(self.client, messages)
+        response = import_azureopenai.chat_completion(self.client, messages)
         
         # Verify we got a non-empty response
         assert response is not None
         assert len(response) > 0
         
         # Use GPT-5 to evaluate the reasonableness
-        is_reasonable, explanation = evaluate_reasonableness(self.client, prompt, response)
+        is_reasonable, explanation = evaluate_reasonableness(
+            self.client, import_azureopenai.chat_completion, prompt, response
+        )
         
-        assert is_reasonable, f"GPT-5 response was deemed unreasonable. Response: {response}. Explanation: {explanation}"
+        assert is_reasonable, f"Response deemed unreasonable. Response: {response}. Explanation: {explanation}"
     
-    def test_factual_question_response(self):
-        """Test that GPT-5 responds reasonably to a factual question."""
+    def test_chat_completion_factual_question(self):
+        """Test chat_completion with a factual question."""
         prompt = "What is the capital of France?"
         messages = [{"role": "user", "content": prompt}]
         
-        response = call_gpt5(self.client, messages)
+        response = import_azureopenai.chat_completion(self.client, messages)
         
         # Verify we got a non-empty response
         assert response is not None
         assert len(response) > 0
         
         # Use GPT-5 to evaluate the reasonableness
-        is_reasonable, explanation = evaluate_reasonableness(self.client, prompt, response)
+        is_reasonable, explanation = evaluate_reasonableness(
+            self.client, import_azureopenai.chat_completion, prompt, response
+        )
         
-        assert is_reasonable, f"GPT-5 response was deemed unreasonable. Response: {response}. Explanation: {explanation}"
+        assert is_reasonable, f"Response deemed unreasonable. Response: {response}. Explanation: {explanation}"
+
+
+class TestImportOpenAIV0:
+    """Test the import_openai_v0 module."""
     
-    def test_coding_question_response(self):
-        """Test that GPT-5 responds reasonably to a coding question."""
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Set up test fixtures."""
+        # Skip tests if environment variables are not configured
+        if not all([os.getenv("API_ENDPOINT"), os.getenv("API_KEY"), os.getenv("MODEL_DEPLOYMENT_NAME")]):
+            pytest.skip("API credentials not configured. Set API_ENDPOINT, API_KEY, and MODEL_DEPLOYMENT_NAME environment variables.")
+        
+        self.client = import_openai_v0.get_openai_client_v0()
+    
+    def test_get_openai_client_v0(self):
+        """Test that get_openai_client_v0 returns a valid client."""
+        client = import_openai_v0.get_openai_client_v0()
+        assert client is not None
+    
+    def test_chat_completion_greeting(self):
+        """Test chat_completion with a greeting prompt."""
+        prompt = "Hello, GPT-5!"
+        messages = [{"role": "user", "content": prompt}]
+        
+        response = import_openai_v0.chat_completion(self.client, messages)
+        
+        # Verify we got a non-empty response
+        assert response is not None
+        assert len(response) > 0
+        
+        # Use GPT-5 to evaluate the reasonableness
+        is_reasonable, explanation = evaluate_reasonableness(
+            self.client, import_openai_v0.chat_completion, prompt, response
+        )
+        
+        assert is_reasonable, f"Response deemed unreasonable. Response: {response}. Explanation: {explanation}"
+    
+    def test_chat_completion_coding_question(self):
+        """Test chat_completion with a coding question."""
         prompt = "Write a simple Python function that adds two numbers."
         messages = [{"role": "user", "content": prompt}]
         
-        response = call_gpt5(self.client, messages)
+        response = import_openai_v0.chat_completion(self.client, messages)
         
         # Verify we got a non-empty response
         assert response is not None
         assert len(response) > 0
         
         # Use GPT-5 to evaluate the reasonableness
-        is_reasonable, explanation = evaluate_reasonableness(self.client, prompt, response)
+        is_reasonable, explanation = evaluate_reasonableness(
+            self.client, import_openai_v0.chat_completion, prompt, response
+        )
         
-        assert is_reasonable, f"GPT-5 response was deemed unreasonable. Response: {response}. Explanation: {explanation}"
+        assert is_reasonable, f"Response deemed unreasonable. Response: {response}. Explanation: {explanation}"
+
+
+class TestImportOpenAIV1:
+    """Test the import_openai_v1 module."""
     
-    def test_conversation_context(self):
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Set up test fixtures."""
+        # Skip tests if environment variables are not configured
+        if not all([os.getenv("API_ENDPOINT"), os.getenv("API_KEY"), os.getenv("MODEL_DEPLOYMENT_NAME")]):
+            pytest.skip("API credentials not configured. Set API_ENDPOINT, API_KEY, and MODEL_DEPLOYMENT_NAME environment variables.")
+        
+        self.client = import_openai_v1.get_openai_client_v1()
+    
+    def test_get_openai_client_v1(self):
+        """Test that get_openai_client_v1 returns a valid client."""
+        client = import_openai_v1.get_openai_client_v1()
+        assert client is not None
+    
+    def test_chat_completion_greeting(self):
+        """Test chat_completion with a greeting prompt."""
+        prompt = "Hello, GPT-5!"
+        messages = [{"role": "user", "content": prompt}]
+        
+        response = import_openai_v1.chat_completion(self.client, messages)
+        
+        # Verify we got a non-empty response
+        assert response is not None
+        assert len(response) > 0
+        
+        # Use GPT-5 to evaluate the reasonableness
+        is_reasonable, explanation = evaluate_reasonableness(
+            self.client, import_openai_v1.chat_completion, prompt, response
+        )
+        
+        assert is_reasonable, f"Response deemed unreasonable. Response: {response}. Explanation: {explanation}"
+    
+    def test_chat_completion_conversation_context(self):
         """Test that GPT-5 maintains context in a multi-turn conversation."""
         messages = [
             {"role": "user", "content": "My name is Alice."},
         ]
         
         # Get first response
-        first_response = call_gpt5(self.client, messages)
+        first_response = import_openai_v1.chat_completion(self.client, messages)
         
         # Add context and ask a follow-up
         messages.append({"role": "assistant", "content": first_response})
         messages.append({"role": "user", "content": "What is my name?"})
         
-        follow_up_response = call_gpt5(self.client, messages)
+        follow_up_response = import_openai_v1.chat_completion(self.client, messages)
         
         # Verify we got a non-empty response
         assert follow_up_response is not None
@@ -158,8 +231,9 @@ class TestGPT5OutputReasonableness:
         full_conversation = f"User: My name is Alice. Assistant: {first_response} User: What is my name? Assistant: {follow_up_response}"
         is_reasonable, explanation = evaluate_reasonableness(
             self.client, 
+            import_openai_v1.chat_completion,
             "A conversation where user states their name is Alice, then asks what their name is",
             full_conversation
         )
         
-        assert is_reasonable, f"GPT-5 response was deemed unreasonable. Response: {follow_up_response}. Explanation: {explanation}"
+        assert is_reasonable, f"Response deemed unreasonable. Response: {follow_up_response}. Explanation: {explanation}"
