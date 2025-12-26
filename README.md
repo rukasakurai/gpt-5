@@ -29,7 +29,7 @@ As of 2025 October 28, [the "Azure OpenAI reasoning models" page on learn.micros
 
 As of 2025 October 28, when [looking at the code of openai-python/src/openai/lib/azure.py](openai-python.src.openai.lib.azure.py.md), it seems like the `AzureOpenAI` nor the `AsyncAzureOpenAI` clients call the "v1" API. While as of 2025 October 28, the [README of OpenAI Python API library](https://github.com/openai/openai-python?tab=readme-ov-file#microsoft-azure-openai) uses `AzureOpenAI`, the use of the `OpenAI` client seems required for using the "v1" API.
 
-Compared to directly calling Azure OpenAI Serivce, when calling through Azure API Management with `from openai import OpenAI` (instead of with  `from openai import AzureOpenAI`), the following changes needs to be applied
+Compared to directly calling Azure OpenAI Service, when calling through Azure API Management with `from openai import OpenAI` (instead of with  `from openai import AzureOpenAI`), the following changes needs to be applied
 ```diff
 + default_headers = {
 +    "api-key": os.getenv("API_KEY"),
