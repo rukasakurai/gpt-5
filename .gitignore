@@ -1,2 +1,4 @@
 .env
 /untracked/
+__pycache__/
+*.pyc
