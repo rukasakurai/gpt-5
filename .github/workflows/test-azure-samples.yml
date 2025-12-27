@@ -52,3 +52,6 @@ jobs:
 
       - name: Run responses/tool_calling/main.py
         run: python python/responses/tool_calling/main.py
+
+      - name: Run agent_framework/main.py
+        run: python python/agent_framework/main.py
