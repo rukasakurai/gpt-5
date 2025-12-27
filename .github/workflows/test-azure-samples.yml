@@ -46,3 +46,9 @@ jobs:
 
       - name: Run import_openai_v1.py
         run: python python/import_openai_v1.py
+
+      - name: Run responses/basic_text/main.py
+        run: python python/responses/basic_text/main.py
+
+      - name: Run responses/tool_calling/main.py
+        run: python python/responses/tool_calling/main.py
