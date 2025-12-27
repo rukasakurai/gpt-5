@@ -7,6 +7,7 @@ Requires: pip install agent-framework python-dotenv
 
 import asyncio
 import os
+import sys
 
 from dotenv import load_dotenv
 from agent_framework import ChatAgent
@@ -62,6 +63,7 @@ async def main():
 
     except Exception as e:
         print(f"Error: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
