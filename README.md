@@ -6,12 +6,12 @@ Samples of ways to call gpt-5 on Azure
 
 ## Variations
 
-The following are key types of variations when using GPT-5, whether calling through Azure API Management or directly via Azure OpenAI Service / Azure AI Foundry:
+The following are key types of variations when using GPT-5, whether calling through Azure API Management or directly via Azure OpenAI Service / Microsoft Foundry:
 
 - **Client class choice (same Python package)** (`from openai import AzureOpenAI` vs. `from openai import OpenAI`)
 - **API endpoint style** (e.g., legacy endpoints vs. standardized `/v1` endpoints)
 - **API version** (e.g., specific version dates, lifecycle changes)
-- **Service type** (e.g., Azure OpenAI Service vs. Azure AI Foundry)
+- **Service type** (e.g., Azure OpenAI Service vs. Microsoft Foundry)
 - **Authentication method** (e.g., API key vs. Azure AD token)
 - **Operation surface** (e.g., Chat Completions, Responses API, Embeddings)
 - **Other** (e.g., deployment vs. model naming, streaming, advanced features)
@@ -19,7 +19,7 @@ The following are key types of variations when using GPT-5, whether calling thro
 ### Combination 1
 - **Client class choice (same Python package)**: `from openai import OpenAI`
 - **API endpoint style**: `/v1`
-- **Service type**: Azure OpenAI Service (NOT Azure AI Foundry)
+- **Service type**: Azure OpenAI Service (NOT Microsoft Foundry)
 - **Authentication method**: API key
 - **Operation surface**: Chat Completions
 - **Model**: GPT-5

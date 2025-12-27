@@ -12,7 +12,7 @@ While for repeatability purposes IaC (e.g., Bicep) is preferable, this repositor
 As of the "+Add API" button in the "APIs" menu of Azure API Management service shows the following options
 - "HTTP: Manually define an HTTP API"
 - "Language Model API: Create an API for an OpenAI API compatible model"
-- "Azure OpenAI Service: Connect API Management service to Azure OpenAI - Please use 'Azure AI Foundry' import for a more updated experience"
-- "Azure AI Foundry: Connect API Management services to Azure AI Foundry"
+- "Azure OpenAI Service: Connect API Management service to Azure OpenAI - Please use 'Microsoft Foundry' import for a more updated experience"
+- "Microsoft Foundry: Connect API Management services to Microsoft Foundry"
 
 Testing with the repository was performed using an API that was created with the "Language Model API" option.
