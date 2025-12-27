@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [azure-openai-service, azure-api-management]
+        environment: [azure-openai-service, azure-api-management, microsoft-foundry]
       fail-fast: false
     environment: ${{ matrix.environment }}
     env:
