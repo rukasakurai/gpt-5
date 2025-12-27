@@ -5,6 +5,7 @@ Requires: pip install openai python-dotenv
 """
 
 import os
+import sys
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -39,6 +40,7 @@ def main():
 
     except Exception as e:
         print(f"Error: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
