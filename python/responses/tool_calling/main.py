@@ -71,7 +71,12 @@ def main():
         for item in response.output:
             if item.type == "function_call":
                 # Execute the function
-                args = json.loads(item.arguments)
+                try:
+                    args = json.loads(item.arguments)
+                except json.JSONDecodeError as e:
+                    raise ValueError(
+                        f"Invalid JSON in tool arguments for '{item.name}': {item.arguments}"
+                    ) from e
                 result = get_weather(args["city"])
                 print(f"Function called: {item.name}({args})")
                 print(f"Function result: {result}")
