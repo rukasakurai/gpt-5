@@ -77,7 +77,11 @@ def main():
                     raise ValueError(
                         f"Invalid JSON in tool arguments for '{item.name}': {item.arguments}"
                     ) from e
-                result = get_weather(args["city"])
+                if not isinstance(args, dict) or "city" not in args:
+                    print(f"Skipping function call {item.name}: missing required 'city' argument in {args}")
+                    continue
+                city = args["city"]
+                result = get_weather(city)
                 print(f"Function called: {item.name}({args})")
                 print(f"Function result: {result}")
 
